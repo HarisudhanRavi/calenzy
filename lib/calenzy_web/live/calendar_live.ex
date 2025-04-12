@@ -3,28 +3,53 @@ defmodule CalenzyWeb.CalendarLive do
 
   def render(assigns) do
     ~H"""
-    <div>Year: {@year}</div>
-    <div>Month: {@month}</div>
+    <div class="w-72 h-72 border-2 rounded-lg border-black">
+      <div class="flex justify-between w-full p-2 text-center border-b-2 border-black">
+        <div
+          phx-click="change_month"
+          phx-value-change="previous"
+          class="hover:bg-gray-300 hover:cursor-pointer"
+        >
+          <.icon name="hero-chevron-left-mini" />
+        </div>
+        <div>{@display_month} . {@year}</div>
+        <div
+          phx-click="change_month"
+          phx-value-change="next"
+          class="hover:bg-gray-300 hover:cursor-pointer"
+        >
+          <.icon name="hero-chevron-right-mini" />
+        </div>
+      </div>
+      <div class="pt-24 text-center">
+        Calendar
+      </div>
+    </div>
     """
   end
 
   def mount(_params, _session, socket) do
-    socket =
+    {
+      :ok,
       socket
+      |> assign(:start_date, nil)
       |> assign(:year, nil)
       |> assign(:month, nil)
-
-    {:ok, socket}
+      |> assign(:display_month, nil)
+    }
   end
 
   def handle_params(%{"year" => year, "month" => month}, _uri, socket) do
-    {start_date, _end_date} = Calenzy.get_date_range(year, month)
+    year = String.to_integer(year)
+    month = String.to_integer(month)
 
     {
       :noreply,
       socket
+      |> assign(:start_date, Timex.beginning_of_month(year, month))
       |> assign(:year, year)
-      |> assign(:month, Timex.month_name(start_date.month))
+      |> assign(:month, month)
+      |> assign(:display_month, Timex.month_name(month))
     }
   end
 
@@ -32,6 +57,16 @@ defmodule CalenzyWeb.CalendarLive do
     today = Date.utc_today()
 
     {:noreply, push_patch(socket, to: fetch_url_with_params(today.year, today.month))}
+  end
+
+  def handle_event("change_month", %{"change" => "previous"}, socket) do
+    new_start = Timex.shift(socket.assigns.start_date, months: -1)
+    {:noreply, push_patch(socket, to: fetch_url_with_params(new_start.year, new_start.month))}
+  end
+
+  def handle_event("change_month", %{"change" => "next"}, socket) do
+    new_start = Timex.shift(socket.assigns.start_date, months: 1)
+    {:noreply, push_patch(socket, to: fetch_url_with_params(new_start.year, new_start.month))}
   end
 
   defp fetch_url_with_params(year, month) do
