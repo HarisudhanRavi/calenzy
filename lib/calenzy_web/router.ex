@@ -19,7 +19,7 @@ defmodule CalenzyWeb.Router do
 
     get "/", PageController, :home
 
-    live "/calender", CalendarLive, :index
+    live "/calendar", CalendarLive, :index
   end
 
   # Other scopes may use custom stacks.
