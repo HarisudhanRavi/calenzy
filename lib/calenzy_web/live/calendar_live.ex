@@ -3,39 +3,50 @@ defmodule CalenzyWeb.CalendarLive do
 
   def render(assigns) do
     ~H"""
-    <div class="w-72 min-h-72 border-2 rounded-lg border-black">
-      <div class="flex justify-between w-full p-2 text-center border-b-2 border-black">
-        <div
-          phx-click="change_month"
-          phx-value-change="previous"
-          class="hover:bg-gray-300 hover:cursor-pointer"
-        >
-          <.icon name="hero-chevron-left-mini" />
+    <div class="w-full h-full flex justify-around">
+      <div class="w-72 min-h-72 p-1 border-2 rounded-lg border-black">
+        <div class="flex justify-between w-full p-2 text-center border-b-2 border-black">
+          <div
+            phx-click="change_month"
+            phx-value-change="previous"
+            class="hover:bg-gray-300 hover:cursor-pointer"
+          >
+            <.icon name="hero-chevron-left-mini" />
+          </div>
+          <div>{@display_month} . {@year}</div>
+          <div
+            phx-click="change_month"
+            phx-value-change="next"
+            class="hover:bg-gray-300 hover:cursor-pointer"
+          >
+            <.icon name="hero-chevron-right-mini" />
+          </div>
         </div>
-        <div>{@display_month} . {@year}</div>
-        <div
-          phx-click="change_month"
-          phx-value-change="next"
-          class="hover:bg-gray-300 hover:cursor-pointer"
-        >
-          <.icon name="hero-chevron-right-mini" />
-        </div>
-      </div>
-      <div class="grid grid-cols-7 gap-2 text-center">
-        <%= for day <- ["S", "M", "T", "W", "T", "F", "S"] do %>
-          <div class="font-bold p-1">{day}</div>
-        <% end %>
-
-        <%= for week <- @calendar do %>
-          <%= for date <- week do %>
-            <div class="p-1">
-              <%= if date do %>
-                {date.day}
-              <% end %>
-            </div>
+        <div class="grid grid-cols-7 gap-2 text-center">
+          <%= for day <- ["S", "M", "T", "W", "T", "F", "S"] do %>
+            <div class="font-bold p-1">{day}</div>
           <% end %>
-        <% end %>
+
+          <%= for week <- @calendar do %>
+            <%= for date <- week do %>
+              <div
+                class={[
+                  "p-1 rounded-md",
+                  date && "hover:bg-gray-300 hover:cursor-pointer",
+                  date == @selected_date && "bg-gray-400"
+                ]}
+                phx-click="select_date"
+                phx-value-date={date}
+              >
+                <%= if date do %>
+                  {date.day}
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
       </div>
+      <.live_component module={CalenzyWeb.EventsComponent} id="events" date={@selected_date} />
     </div>
     """
   end
@@ -48,6 +59,7 @@ defmodule CalenzyWeb.CalendarLive do
       |> assign(:year, nil)
       |> assign(:month, nil)
       |> assign(:display_month, nil)
+      |> assign(:selected_date, Date.utc_today())
     }
   end
 
@@ -80,6 +92,14 @@ defmodule CalenzyWeb.CalendarLive do
   def handle_event("change_month", %{"change" => "next"}, socket) do
     new_start = Timex.shift(socket.assigns.start_date, months: 1)
     {:noreply, push_patch(socket, to: fetch_url_with_params(new_start.year, new_start.month))}
+  end
+
+  def handle_event("select_date", %{"date" => date}, socket) do
+    {:noreply, assign(socket, :selected_date, Date.from_iso8601!(date))}
+  end
+
+  def handle_event("select_date", _params, socket) do
+    {:noreply, socket}
   end
 
   defp fetch_url_with_params(year, month) do
