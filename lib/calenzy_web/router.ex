@@ -18,6 +18,8 @@ defmodule CalenzyWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    live "/calender", CalendarLive, :index
   end
 
   # Other scopes may use custom stacks.
