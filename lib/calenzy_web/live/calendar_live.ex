@@ -46,7 +46,13 @@ defmodule CalenzyWeb.CalendarLive do
           <% end %>
         </div>
       </div>
-      <.live_component module={CalenzyWeb.EventsComponent} id="events" date={@selected_date} />
+
+      <div class="w-[40%] h-full mx-12">
+        <.button phx-click="today" class="my-2 ml-20 text-center">Go to Today</.button>
+        <div class="h-64">
+          <.live_component module={CalenzyWeb.EventsComponent} id="events" date={@selected_date} />
+        </div>
+      </div>
     </div>
     """
   end
@@ -100,6 +106,17 @@ defmodule CalenzyWeb.CalendarLive do
 
   def handle_event("select_date", _params, socket) do
     {:noreply, socket}
+  end
+
+  def handle_event("today", _params, socket) do
+    today = Date.utc_today()
+
+    {
+      :noreply,
+      socket
+      |> assign(:selected_date, today)
+      |> push_patch(to: fetch_url_with_params(today.year, today.month))
+    }
   end
 
   defp fetch_url_with_params(year, month) do

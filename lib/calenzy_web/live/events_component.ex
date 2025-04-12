@@ -3,7 +3,7 @@ defmodule CalenzyWeb.EventsComponent do
 
   def render(assigns) do
     ~H"""
-    <div class="w-[40%] m-12 border-2 border-black rounded-md text-center">
+    <div class="h-full border-2 border-black rounded-md text-center">
       <div>{@date}</div>
     </div>
     """
