@@ -1,18 +1,40 @@
-# Calenzy
+# 🌿 Calenzy
 
-To start your Phoenix server:
+**Calenzy** is a real-time, minimal calendar app built with Phoenix LiveView.  
+Click on a date to view, create, update, or delete events—fast, interactive, and cozy.
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+---
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+## 🚀 Features
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+- 📅 Full calendar view
+- 🖱️ Click on any date to see events
+- ➕ Add, ✏️ edit, and ❌ delete events
+- 🔄 Live updates without page reloads (LiveView magic)
+- 🧘‍♂️ Clean and responsive UI
 
-## Learn more
+---
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+## 🛠 Tech Stack
+
+- [Elixir](https://elixir-lang.org/)
+- [Phoenix](https://phoenixframework.org/) with LiveView
+- [Tailwind CSS](https://tailwindcss.com/) for styling
+
+---
+
+## 📦 Setup
+
+```bash
+# 1. Clone the repo
+git clone https://github.com/yourusername/calenzy.git
+cd calenzy
+
+# 2. Install dependencies
+mix deps.get
+
+# 3. Set up the database (if using Ecto)
+mix ecto.setup
+
+# 4. Start the Phoenix server
+mix phx.server
