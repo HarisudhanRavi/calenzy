@@ -3,7 +3,7 @@ defmodule CalenzyWeb.CalendarLive do
 
   def render(assigns) do
     ~H"""
-    <div class="w-72 h-72 border-2 rounded-lg border-black">
+    <div class="w-72 min-h-72 border-2 rounded-lg border-black">
       <div class="flex justify-between w-full p-2 text-center border-b-2 border-black">
         <div
           phx-click="change_month"
@@ -21,8 +21,20 @@ defmodule CalenzyWeb.CalendarLive do
           <.icon name="hero-chevron-right-mini" />
         </div>
       </div>
-      <div class="pt-24 text-center">
-        Calendar
+      <div class="grid grid-cols-7 gap-2 text-center">
+        <%= for day <- ["S", "M", "T", "W", "T", "F", "S"] do %>
+          <div class="font-bold p-1">{day}</div>
+        <% end %>
+
+        <%= for week <- @calendar do %>
+          <%= for date <- week do %>
+            <div class="p-1">
+              <%= if date do %>
+                {date.day}
+              <% end %>
+            </div>
+          <% end %>
+        <% end %>
       </div>
     </div>
     """
@@ -50,6 +62,7 @@ defmodule CalenzyWeb.CalendarLive do
       |> assign(:year, year)
       |> assign(:month, month)
       |> assign(:display_month, Timex.month_name(month))
+      |> assign(:calendar, Calenzy.build_month_calendar(year, month))
     }
   end
 
