@@ -12,6 +12,8 @@ defmodule Calenzy.Application do
       Calenzy.Repo,
       {DNSCluster, query: Application.get_env(:calenzy, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Calenzy.PubSub},
+      # Events store
+      Calenzy.CalendarEvents,
       # Start the Finch HTTP client for sending emails
       {Finch, name: Calenzy.Finch},
       # Start a worker by calling: Calenzy.Worker.start_link(arg)
