@@ -3,8 +3,8 @@ defmodule CalenzyWeb.CalendarLive do
 
   def render(assigns) do
     ~H"""
-    <div class="w-full h-full flex justify-around">
-      <div class="w-72 min-h-72 p-1 border-2 rounded-lg border-black">
+    <div class="w-full h-full flex justify-center">
+      <div class="min-w-80 min-h-72 p-1 border-2 rounded-lg border-black">
         <div class="flex justify-between w-full p-2 text-center border-b-2 border-black">
           <div
             phx-click="change_month"
@@ -45,13 +45,11 @@ defmodule CalenzyWeb.CalendarLive do
             <% end %>
           <% end %>
         </div>
+        <button phx-click="today" class="btn btn-xs btn-ghost ml-28">Go to Today</button>
       </div>
 
-      <div class="w-[40%] h-full mx-12">
-        <.button phx-click="today" class="my-2 ml-20 text-center">Go to Today</.button>
-        <div class="h-64">
-          <.live_component module={CalenzyWeb.EventsComponent} id="events" date={@selected_date} />
-        </div>
+      <div class="h-full ml-24">
+        <.live_component module={CalenzyWeb.EventsComponent} id="events" date={@selected_date} />
       </div>
     </div>
     """
