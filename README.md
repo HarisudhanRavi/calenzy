@@ -19,7 +19,7 @@ Click on a date to view, create, update, or delete events—fast, interactive, a
 
 - [Elixir](https://elixir-lang.org/)
 - [Phoenix](https://phoenixframework.org/) with LiveView
-- [Tailwind CSS](https://tailwindcss.com/) for styling
+- [Tailwind CSS](https://tailwindcss.com/) and [daisyUI](https://daisyui.com) for styling
 
 ---
 
