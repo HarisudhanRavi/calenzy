@@ -117,6 +117,15 @@ defmodule CalenzyWeb.CalendarLive do
     }
   end
 
+  def handle_info({:select_date, selected_date}, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(:selected_date, selected_date)
+      |> push_patch(to: fetch_url_with_params(selected_date.year, selected_date.month))
+    }
+  end
+
   defp fetch_url_with_params(year, month) do
     "/calendar?year=#{year}&month=#{month}"
   end

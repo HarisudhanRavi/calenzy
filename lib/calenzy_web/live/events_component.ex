@@ -7,7 +7,23 @@ defmodule CalenzyWeb.EventsComponent do
     ~H"""
     <div class="card shadow-xl w-96">
       <div class="card-body">
-        <h2 class="card-title">{@date}</h2>
+        <div class="card-title flex justify-center">
+          <.icon
+            name="hero-chevron-left-mini"
+            phx-click="change_date"
+            phx-value-change="previous"
+            phx-target={@myself}
+            class="hover:bg-gray-300 hover:cursor-pointer rounded-md"
+          />
+          <h2>{Timex.format!(@date, "{0D}-{0M}-{YYYY}")}</h2>
+          <.icon
+            name="hero-chevron-right-mini"
+            phx-click="change_date"
+            phx-value-change="next"
+            phx-target={@myself}
+            class="hover:bg-gray-300 hover:cursor-pointer rounded-md"
+          />
+        </div>
         <ul class="list bg-base-100 rounded-box shadow-md">
           <li :for={event <- @events} class="list-row">
             <div>
@@ -26,7 +42,33 @@ defmodule CalenzyWeb.EventsComponent do
       :ok,
       socket
       |> assign(assigns)
-      |> assign(:date, Timex.format!(date, "{0D}-{0M}-{YYYY}"))
+      |> assign(:date, date)
+      |> assign(:events, Events.fetch_events(date))
+    }
+  end
+
+  def handle_event("change_date", %{"change" => "previous"}, socket) do
+    date = Timex.shift(socket.assigns.date, days: -1)
+
+    send(self(), {:select_date, date})
+
+    {
+      :noreply,
+      socket
+      |> assign(:date, date)
+      |> assign(:events, Events.fetch_events(date))
+    }
+  end
+
+  def handle_event("change_date", %{"change" => "next"}, socket) do
+    date = Timex.shift(socket.assigns.date, days: 1)
+
+    send(self(), {:select_date, date})
+
+    {
+      :noreply,
+      socket
+      |> assign(:date, date)
       |> assign(:events, Events.fetch_events(date))
     }
   end
