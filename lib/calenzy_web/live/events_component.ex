@@ -24,7 +24,10 @@ defmodule CalenzyWeb.EventsComponent do
             class="hover:bg-gray-300 hover:cursor-pointer rounded-md"
           />
         </div>
-        <ul class="list bg-base-100 rounded-box shadow-md">
+        <div :if={@events == []} class="m-8 text-center">
+          <span class="badge badge-ghost badge-xl">No Events</span>
+        </div>
+        <ul :if={@events != []} class="list bg-base-100 rounded-box shadow-md">
           <li :for={event <- @events} class="list-row">
             <div>
               <div>{event.name}</div>
