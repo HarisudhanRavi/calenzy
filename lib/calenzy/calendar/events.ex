@@ -1,4 +1,4 @@
-defmodule Calenzy.CalendarEvents do
+defmodule Calenzy.Calendar.Events do
   @table_name :calendar_events
 
   def child_spec(opts) do
