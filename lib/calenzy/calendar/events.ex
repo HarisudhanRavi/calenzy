@@ -13,6 +13,7 @@ defmodule Calenzy.Calendar.Events do
 
   def create_events_table(_) do
     :ets.new(@table_name, [:ordered_set, :public, :named_table])
+    seed_fake_data()
     {:ok, self()}
   end
 
@@ -26,5 +27,10 @@ defmodule Calenzy.Calendar.Events do
       [{_date, events}] -> events
       [] -> []
     end
+  end
+
+  defp seed_fake_data() do
+    Calenzy.Calendar.Seeds.provide_seed_data()
+    |> Enum.map(fn {date, event} -> save_event(date, event) end)
   end
 end
