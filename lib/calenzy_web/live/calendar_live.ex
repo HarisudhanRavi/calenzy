@@ -6,21 +6,20 @@ defmodule CalenzyWeb.CalendarLive do
     <div class="w-full h-full flex justify-center items-start">
       <div class="min-w-80 min-h-72 max-h-[350px] p-1 border-2 rounded-lg border-black">
         <div class="flex justify-between w-full p-2 text-center border-b-2 border-black">
-          <div
+          <.icon
+            name="hero-chevron-left-mini"
             phx-click="change_month"
             phx-value-change="previous"
-            class="hover:bg-gray-300 hover:cursor-pointer"
-          >
-            <.icon name="hero-chevron-left-mini" />
-          </div>
+            class="hover:bg-gray-300 hover:cursor-pointer rounded-md"
+          />
+
           <div>{@display_month} . {@year}</div>
-          <div
+          <.icon
+            name="hero-chevron-right-mini"
             phx-click="change_month"
             phx-value-change="next"
-            class="hover:bg-gray-300 hover:cursor-pointer"
-          >
-            <.icon name="hero-chevron-right-mini" />
-          </div>
+            class="hover:bg-gray-300 hover:cursor-pointer rounded-md"
+          />
         </div>
         <div class="grid grid-cols-7 gap-2 text-center">
           <%= for day <- ["S", "M", "T", "W", "T", "F", "S"] do %>
