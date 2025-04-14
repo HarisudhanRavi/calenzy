@@ -9,7 +9,7 @@ defmodule CalenzyWeb.CalendarLive do
           <.icon
             name="hero-chevron-left-mini"
             phx-click="change_month"
-            phx-value-change="previous"
+            phx-value-change="-1"
             class="hover:bg-gray-300 hover:cursor-pointer rounded-md"
           />
 
@@ -17,7 +17,7 @@ defmodule CalenzyWeb.CalendarLive do
           <.icon
             name="hero-chevron-right-mini"
             phx-click="change_month"
-            phx-value-change="next"
+            phx-value-change="+1"
             class="hover:bg-gray-300 hover:cursor-pointer rounded-md"
           />
         </div>
@@ -87,13 +87,8 @@ defmodule CalenzyWeb.CalendarLive do
     {:noreply, push_patch(socket, to: fetch_url_with_params(today.year, today.month))}
   end
 
-  def handle_event("change_month", %{"change" => "previous"}, socket) do
-    new_start = Timex.shift(socket.assigns.start_date, months: -1)
-    {:noreply, push_patch(socket, to: fetch_url_with_params(new_start.year, new_start.month))}
-  end
-
-  def handle_event("change_month", %{"change" => "next"}, socket) do
-    new_start = Timex.shift(socket.assigns.start_date, months: 1)
+  def handle_event("change_month", %{"change" => change}, socket) do
+    new_start = Timex.shift(socket.assigns.start_date, months: String.to_integer(change))
     {:noreply, push_patch(socket, to: fetch_url_with_params(new_start.year, new_start.month))}
   end
 

@@ -11,7 +11,7 @@ defmodule CalenzyWeb.EventsComponent do
           <.icon
             name="hero-chevron-left-mini"
             phx-click="change_date"
-            phx-value-change="previous"
+            phx-value-change="-1"
             phx-target={@myself}
             class="hover:bg-gray-300 hover:cursor-pointer rounded-md"
           />
@@ -19,7 +19,7 @@ defmodule CalenzyWeb.EventsComponent do
           <.icon
             name="hero-chevron-right-mini"
             phx-click="change_date"
-            phx-value-change="next"
+            phx-value-change="+1"
             phx-target={@myself}
             class="hover:bg-gray-300 hover:cursor-pointer rounded-md"
           />
@@ -47,21 +47,8 @@ defmodule CalenzyWeb.EventsComponent do
     }
   end
 
-  def handle_event("change_date", %{"change" => "previous"}, socket) do
-    date = Timex.shift(socket.assigns.date, days: -1)
-
-    send(self(), {:select_date, date})
-
-    {
-      :noreply,
-      socket
-      |> assign(:date, date)
-      |> assign(:events, Events.fetch_events(date))
-    }
-  end
-
-  def handle_event("change_date", %{"change" => "next"}, socket) do
-    date = Timex.shift(socket.assigns.date, days: 1)
+  def handle_event("change_date", %{"change" => change}, socket) do
+    date = Timex.shift(socket.assigns.date, days: String.to_integer(change))
 
     send(self(), {:select_date, date})
 
