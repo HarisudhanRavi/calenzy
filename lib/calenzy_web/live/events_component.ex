@@ -35,6 +35,7 @@ defmodule CalenzyWeb.EventsComponent do
             </div>
           </li>
         </ul>
+        <button phx-click={show_modal("form-modal")} class="btn">Add Event</button>
       </div>
     </div>
     """

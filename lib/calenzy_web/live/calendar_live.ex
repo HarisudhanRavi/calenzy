@@ -51,6 +51,8 @@ defmodule CalenzyWeb.CalendarLive do
         <.live_component module={CalenzyWeb.EventsComponent} id="events" date={@selected_date} />
       </div>
     </div>
+
+    <.live_component module={CalenzyWeb.FormComponent} id="form-component" />
     """
   end
 
